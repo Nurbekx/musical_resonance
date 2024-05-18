@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Musical Resonance{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'album/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <a href="{% url 'home' %}">Главная</a>
+                <a href="#">Альбомы</a>
+                <form action="{% url 'search' %}" method="get" class="search-form">
+                    <input type="text" name="q" placeholder="Название альбома или исполнителя">
+                    <button type="submit">Поиск</button>
+                </form>
+            </div>
+            <div class="nav-center">
+                <h1>Musical Resonance</h1>
+            </div><div class="nav-right">
+                {% if user.is_authenticated %}
+                    <span>{{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="logout_btn" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти в аккаунт</a>
+                    <a href="{% url 'signup' %}">Зарегистрироваться</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

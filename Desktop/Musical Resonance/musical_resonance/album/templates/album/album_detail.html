@@ -1,0 +1,32 @@
+{% extends 'album/base.html' %}
+
+{% block title %}{{ album.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ album.title }} от исполнителя {{ album.artist }}</h2>
+    <p>Жанр: {{ album.genre }}</p>
+    <p>Дата релиза: {{ album.release_date }}</p>
+    <img src="{{ album.cover_image.url }}" alt="{{ album.title }} cover">
+
+    <h3>Отзывы</h3>
+    <ul>
+        {% for review in reviews %}
+            <li>
+                <strong>{{ review.user.username }}:</strong> {{ review.text }} ({{ review.rating }}/5)
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <h3>Оставить отзыв</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Подтвердить</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Войдите в аккаунт</a> чтобы оставить отзыв.</p>
+    {% endif %}
+
+    <button class="back-button" onclick="window.history.back()">Назад</button>
+{% endblock %}
